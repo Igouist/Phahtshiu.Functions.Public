@@ -2,6 +2,7 @@
 using Phahtshiu.Functions.Application.RandomNumbers;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Phahtshiu.Functions.Application.Sportscenter;
 
 namespace Phahtshiu.Functions.Endpoints;
 
@@ -29,19 +30,32 @@ public class LineBotEndpoints
             return "請輸入訊息= =";
         }
         
-        var result = message switch
+        var reply = message switch
         {
             _ when message.StartsWith("/r") => RunRandomNumberCommand(message),
-            _ => "請輸入 /r 以取得隨機數"
+            _ when message.StartsWith("/swim") => FetchSportscenterSwimmingPeopleCountCommand(message),
+            _ => DefaultReply()
         };
         
-        return result;
+        return await reply;
     }
     
-    private string RunRandomNumberCommand(string message)
+    private static Task<string> DefaultReply()
+    {
+        return Task.FromResult("請輸入 /r 以取得隨機數");
+    }
+    
+    private async Task<string> RunRandomNumberCommand(string message)
     {
         var command = new RandomNumberCommand(message);
-        var randomNumber = _mediator.Send(command).Result;
+        var randomNumber = await _mediator.Send(command);
         return randomNumber;
+    }
+
+    private async Task<string> FetchSportscenterSwimmingPeopleCountCommand(string message)
+    {
+        var command = new FetchSportscenterSwimmingPeopleCountCommand(message);
+        var swimPeopleNum = await _mediator.Send(command);
+        return swimPeopleNum;
     }
 }
