@@ -1,28 +1,47 @@
-﻿using MediatR;
+﻿using System.Net;
+using MediatR;
 using Phahtshiu.Functions.Application.RandomNumbers;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.Sportscenter;
+using Phahtshiu.Functions.Options;
+using LineBot = isRock.LineBot;
 
 namespace Phahtshiu.Functions.Endpoints;
 
 public class LineBotEndpoints
 {
     private readonly IMediator _mediator;
+    private readonly LineBotOption _lineBotOptions;
 
     public LineBotEndpoints(
-        IMediator mediator)
+        IMediator mediator,
+        IOptions<LineBotOption> lineBotOptions)
     {
         _mediator = mediator;
+        _lineBotOptions = lineBotOptions.Value;
+    }
+
+    private Task<string> Run(string message)
+    {
+        var reply = message switch
+        {
+            _ when message.StartsWith("/r") => RunRandomNumberCommand(message),
+            _ when message.StartsWith("/swim") => FetchSportscenterSwimmingPeopleCountCommand(message),
+            _ => DefaultReply()
+        };
+        return reply;
     }
 
     /// <summary>
-    /// 測試用 Function
+    /// Line Bot 測試用 Function
     /// </summary>
     /// <returns></returns>
     [Function("Line-Bot-Testing")]
     public async Task<string> TestingLineBotReply(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] 
+        HttpRequestData req)
     {
         var message = await new StreamReader(req.Body).ReadToEndAsync();
         if (string.IsNullOrEmpty(message))
@@ -30,19 +49,70 @@ public class LineBotEndpoints
             return "請輸入訊息= =";
         }
         
-        var reply = message switch
-        {
-            _ when message.StartsWith("/r") => RunRandomNumberCommand(message),
-            _ when message.StartsWith("/swim") => FetchSportscenterSwimmingPeopleCountCommand(message),
-            _ => DefaultReply()
-        };
-        
-        return await reply;
+        return await Run(message);
     }
+
+    /// <summary>
+    /// Line Bot 回覆訊息
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="executionContext"></param>
+    /// <returns></returns>
+    /// <example>https://github.com/isdaviddong/LineBotSdkDotNetCoreWebExample/blob/master/main/main/Controllers/LineBotController.cs</example>
+    [Function("Line-Bot-Reply")]
+    public async Task<HttpResponseData> LineBotReply(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")]
+        HttpRequestData req,
+        FunctionContext executionContext)
+    {
+        var token = _lineBotOptions.ChannelAccessToken;
+        var bot = new LineBot.Bot(token);
+        
+        try
+        {
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+            var receivedMessage = isRock.LineBot.Utility.Parsing(body);
+        
+            var lineEvent = receivedMessage.events.FirstOrDefault()!;
+            var lineEventType = lineEvent.type.ToLower();
+            var lineMessageType = lineEvent.message.type.ToLower();
+            if (lineEventType is not "message" || lineMessageType is not "text")
+            {
+                ReplyMessage(bot, lineEvent, "不支援的格式（你以為我買得起貼圖嗎？）");
+                return req.CreateResponse(HttpStatusCode.OK);
+            }
+        
+            var text = lineEvent.message.text.ToLower();
+            var reply = await Run(text);
+            
+            ReplyMessage(bot, lineEvent, reply);
+            return req.CreateResponse(HttpStatusCode.OK);
+        }
+        catch (Exception exception)
+        {
+            var adminId = _lineBotOptions.UserId;
+            bot.PushMessage(adminId, "LineBot Exception : \n" + exception.Message);
+            throw;
+        }
+    }
+
+    private static void ReplyMessage(
+        LineBot.Bot bot,
+        LineBot.Event lineEvent,
+        string context)
+    {
+        var responseMessages = new List<LineBot.MessageBase>()
+        {
+            new LineBot.TextMessage(context)
+        };
+        bot.ReplyMessage(lineEvent.replyToken, responseMessages);
+    }
+
+    #region 處理訊息動作
     
     private static Task<string> DefaultReply()
     {
-        return Task.FromResult("請輸入 /r 以取得隨機數");
+        return Task.FromResult("不支援的指令 = =");
     }
     
     private async Task<string> RunRandomNumberCommand(string message)
@@ -58,4 +128,6 @@ public class LineBotEndpoints
         var swimPeopleNum = await _mediator.Send(command);
         return swimPeopleNum;
     }
+    
+    #endregion
 }
