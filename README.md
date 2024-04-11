@@ -27,7 +27,7 @@
   - `/swim` 查詢預設運動中心游泳人數資訊 (預設: 松山)
   - `/swim 北投` 查詢北投運動中心游泳人數資訊
 
-![Image](https://i.imgur.com/Ofo4XOd.png)
+![Image](https://i.imgur.com/zlfCoAv.png)
 
 ---
 
