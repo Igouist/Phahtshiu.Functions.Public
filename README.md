@@ -1,8 +1,10 @@
-# 打手（Phahtshiu) 小助手
+# 打手（Phahtshiu）小助手
 
 拍手 phah-tshiú<br/>
 釋義 打手、保鑣。受人僱用，幫人打架的人<br/>
 用例 做人的拍手 (Tsò lâng ê phah-tshiú.) =做他人的打手
+
+也就是說，這是一個給我搓小功能（打手）來玩的地方= =
 
 ## LineBot API 串接
 
