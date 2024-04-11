@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Phahtshiu.Functions.Applicaiton.RandomNumbers;
+using Phahtshiu.Functions.Application.RandomNumbers;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 

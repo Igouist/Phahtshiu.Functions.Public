@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phahtshiu.Functions", "Phahtshiu.Functions\Phahtshiu.Functions.csproj", "{695E1E65-5640-438F-BFC3-FFFC7E88843B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phahtshiu.Functions.Applicaiton", "Phahtshiu.Functions.Applicaiton\Phahtshiu.Functions.Applicaiton.csproj", "{B52BA556-871A-4895-922B-F96F29FE087B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phahtshiu.Functions.Application", "Phahtshiu.Functions.Application\Phahtshiu.Functions.Application.csproj", "{B52BA556-871A-4895-922B-F96F29FE087B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phahtshiu.Functions.Infrastructure", "Phahtshiu.Functions.Infrastructure\Phahtshiu.Functions.Infrastructure.csproj", "{6315A7B4-6005-4DD6-B406-F8C9E5241D4B}"
 EndProject

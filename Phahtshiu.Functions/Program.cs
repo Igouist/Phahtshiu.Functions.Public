@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Hosting;
-using Phahtshiu.Functions.Applicaiton;
+using Phahtshiu.Functions.Application;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()

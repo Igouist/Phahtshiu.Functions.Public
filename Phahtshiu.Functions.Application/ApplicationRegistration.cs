@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Phahtshiu.Functions.Applicaiton;
+namespace Phahtshiu.Functions.Application;
 
 public static class ApplicationRegistration
 {
