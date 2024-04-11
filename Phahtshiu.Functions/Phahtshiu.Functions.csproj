@@ -22,4 +22,8 @@
     <ItemGroup>
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Phahtshiu.Functions.Applicaiton\Phahtshiu.Functions.Applicaiton.csproj" />
+      <ProjectReference Include="..\Phahtshiu.Functions.Infrastructure\Phahtshiu.Functions.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>
