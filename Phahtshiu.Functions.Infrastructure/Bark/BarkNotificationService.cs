@@ -6,6 +6,7 @@ using Phahtshiu.Functions.Application.Notification.Models;
 using Phahtshiu.Functions.Application.Notification.Services;
 using Phahtshiu.Functions.Infrastructure.Bark.Models;
 using Phahtshiu.Functions.Infrastructure.Bark.Options;
+using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Infrastructure.Bark;
 
@@ -32,7 +33,7 @@ public class BarkNotificationService : INotificationService
     public async Task NotificationAsync(NotificationBody notification)
     {
         var key = _barkOptions.Key;
-        if (string.IsNullOrWhiteSpace(key))
+        if (key.IsNullOrWhiteSpace())
         {
             throw new ArgumentNullException(nameof(key));
         }
@@ -70,12 +71,12 @@ public class BarkNotificationService : INotificationService
             Body = notification.Message
         };
         
-        if (string.IsNullOrWhiteSpace(notification.Group) is false)
+        if (notification.Group.IsNullOrWhiteSpace() is false)
         {
             result.Group = notification.Group;
         }
         
-        if (string.IsNullOrWhiteSpace(notification.Url) is false)
+        if (notification.Url.IsNullOrWhiteSpace() is false)
         {
             result.Url = notification.Url;
         }

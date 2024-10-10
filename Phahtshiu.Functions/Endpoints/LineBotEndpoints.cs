@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.Sportscenter;
 using Phahtshiu.Functions.Options;
+using Phahtshiu.Functions.Shared.Extensions;
 using LineBot = isRock.LineBot;
 
 namespace Phahtshiu.Functions.Endpoints;
@@ -44,7 +45,7 @@ public class LineBotEndpoints
         HttpRequestData req)
     {
         var message = await new StreamReader(req.Body).ReadToEndAsync();
-        if (string.IsNullOrEmpty(message))
+        if (message.IsNullOrEmpty())
         {
             return "請輸入訊息= =";
         }

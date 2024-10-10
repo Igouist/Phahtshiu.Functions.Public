@@ -28,5 +28,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Phahtshiu.Functions.Application\Phahtshiu.Functions.Application.csproj" />
       <ProjectReference Include="..\Phahtshiu.Functions.Infrastructure\Phahtshiu.Functions.Infrastructure.csproj" />
+      <ProjectReference Include="..\Phahtshiu.Functions.Shared\Phahtshiu.Functions.Shared.csproj" />
     </ItemGroup>
 </Project>

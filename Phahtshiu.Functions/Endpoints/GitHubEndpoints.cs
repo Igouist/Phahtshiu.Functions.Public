@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Phahtshiu.Functions.Application.Github;
 using Phahtshiu.Functions.Models;
+using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Endpoints;
 
@@ -42,7 +43,7 @@ public class GitHubEndpoints
         }
         
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        if (string.IsNullOrEmpty(body))
+        if (body.IsNullOrEmpty())
         {
             return "未收到訊息，中斷處理";
         }
