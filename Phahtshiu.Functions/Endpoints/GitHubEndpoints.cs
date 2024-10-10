@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Phahtshiu.Functions.Application.Github;
-using Phahtshiu.Functions.Models;
 using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Endpoints;
@@ -34,7 +34,7 @@ public class GitHubEndpoints
         }
         
         var eventType = githubEvents.FirstOrDefault();
-        var allowedEvents = _eventHandlers.Keys;
+        var allowedEvents = EventHandlers.Keys;
         
         if (eventType is null || 
             allowedEvents.Contains(eventType) is false)
@@ -48,25 +48,37 @@ public class GitHubEndpoints
             return "未收到訊息，中斷處理";
         }
         
-        var payload = JsonSerializer.Deserialize<GitHubWebhookPayload>(body);
+        var payload = JsonSerializer.Deserialize<JsonObject>(body);
         if (payload is null)
         {
             return "無法解析訊息，中斷處理";
         }
         
-        var command = _eventHandlers[eventType](payload);
+        var command = EventHandlers[eventType](payload);
+        await _mediator.Send(command);
         return command;
     }
     
-    private static Dictionary<string, Func<GitHubWebhookPayload, IRequest>> _eventHandlers = new()
+    private static readonly Dictionary<string, Func<JsonObject, IRequest>> EventHandlers = new()
     {
-        ["push"] = CreatePushedEventCommand
+        ["push"] = CreatePushedEventCommand,
+        ["issue_comment"] = CreateIssueCommentEventCommand
+        
     };
-    
-    private static GitHubPushedEventCommand CreatePushedEventCommand(GitHubWebhookPayload payload) 
+    private static GitHubPushedEventCommand CreatePushedEventCommand(JsonObject payload) 
     => new (
-        RepositoryName: payload.Repository.Name,
-        CommitMessage: payload.HeadCommit.Message,
-        PusherName: payload.Pusher.Name
+        RepositoryName: payload["repository"]?["name"]?.ToString() ?? string.Empty,
+        CommitMessage: payload["head_commit"]?["message"]?.ToString() ?? string.Empty,
+        PusherName: payload["pusher"]?["name"]?.ToString() ?? string.Empty,
+        RepositoryUrl: payload["repository"]?["url"]?.ToString() ?? string.Empty
+    );
+
+    private static IRequest CreateIssueCommentEventCommand(JsonObject payload)
+    => new GithubIssueCommentedEventCommand(
+        RepositoryName: payload["repository"]?["name"]?.ToString() ?? string.Empty,
+        IssueTitle: payload["issue"]?["title"]?.ToString() ?? string.Empty,
+        CommenterName: payload["comment"]?["user"]?["login"]?.ToString() ?? string.Empty,
+        CommentBody: payload["comment"]?["body"]?.ToString() ?? string.Empty,
+        IssueUrl: payload["comment"]?["html_url"]?.ToString() ?? string.Empty
     );
 }

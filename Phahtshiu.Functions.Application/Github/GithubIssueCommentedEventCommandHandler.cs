@@ -4,32 +4,33 @@ using Phahtshiu.Functions.Application.Notification.Services;
 
 namespace Phahtshiu.Functions.Application.Github;
 
-public record GitHubPushedEventCommand(
+public record GithubIssueCommentedEventCommand(
     string RepositoryName,
-    string CommitMessage,
-    string PusherName,
-    string RepositoryUrl) 
-    : IRequest;
+    string IssueTitle,
+    string CommenterName,
+    string CommentBody,
+    string IssueUrl
+    ) : IRequest;
 
-public class GitHubPushedEventCommandHandler : IRequestHandler<GitHubPushedEventCommand>
+public class GithubIssueCommentedEventCommandHandler : IRequestHandler<GithubIssueCommentedEventCommand>
 {
     private readonly INotificationService _notificationService;
 
-    public GitHubPushedEventCommandHandler(
+    public GithubIssueCommentedEventCommandHandler(
         INotificationService notificationService)
     {
         _notificationService = notificationService;
     }
 
     public Task Handle(
-        GitHubPushedEventCommand request, 
+        GithubIssueCommentedEventCommand request, 
         CancellationToken cancellationToken)
     {
         var message = new NotificationBody
         {
-            Title = $"[GitHub] Pushed: {request.RepositoryName}",
-            Message = $"{request.PusherName}: {request.CommitMessage}",
-            Url = request.RepositoryUrl,
+            Title = $"[GitHub] Issue: {request.IssueTitle} - {request.RepositoryName}",
+            Message = $"{request.CommenterName}: {request.CommentBody}",
+            Url = request.IssueUrl,
             Group = "GitHub"
         };
         
