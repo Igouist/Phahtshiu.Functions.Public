@@ -38,7 +38,6 @@ public class BarkNotificationService : INotificationService
             throw new ArgumentNullException(nameof(key));
         }
         
-        // POST
         var url = $"https://api.day.app/{_barkOptions.Key}";
         var body = CreateBarkNotificationBody(notification);
         var json = JsonSerializer.Serialize(body);

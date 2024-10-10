@@ -10,7 +10,11 @@
 
 ~~Azure Functions 好香啊~~
 
----
+## Github Webhook 相關功能
+
+接收 Github Webhook 來觸發通知
+
+目前通知是使用 [Bark](https://github.com/Finb/Bark) 來發送到 iPhone 上
 
 ## LineBot API 相關功能
 
@@ -28,8 +32,6 @@
   - `/swim 北投` 查詢北投運動中心游泳人數資訊
 
 ![Image](https://i.imgur.com/zlfCoAv.png)
-
----
 
 ## 其他速記
 
