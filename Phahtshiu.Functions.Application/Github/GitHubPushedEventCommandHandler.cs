@@ -2,15 +2,15 @@
 
 namespace Phahtshiu.Functions.Application.Github;
 
-public record GithubPushedEventCommand(
+public record GitHubPushedEventCommand(
     string RepositoryName,
     string CommitMessage,
     string PusherName) : IRequest;
 
-public class GithubPushedEventCommandHandler : IRequestHandler<GithubPushedEventCommand>
+public class GitHubPushedEventCommandHandler : IRequestHandler<GitHubPushedEventCommand>
 {
     public Task Handle(
-        GithubPushedEventCommand request, 
+        GitHubPushedEventCommand request, 
         CancellationToken cancellationToken)
     {
         return Task.FromResult(request.CommitMessage);

@@ -7,11 +7,11 @@ using Phahtshiu.Functions.Models;
 
 namespace Phahtshiu.Functions.Endpoints;
 
-public class GithubEndpoints
+public class GitHubEndpoints
 {
     private readonly IMediator _mediator;
 
-    public GithubEndpoints(
+    public GitHubEndpoints(
         IMediator mediator)
     {
         _mediator = mediator;
@@ -62,7 +62,7 @@ public class GithubEndpoints
         ["push"] = CreatePushedEventCommand
     };
     
-    private static GithubPushedEventCommand CreatePushedEventCommand(GitHubWebhookPayload payload) 
+    private static GitHubPushedEventCommand CreatePushedEventCommand(GitHubWebhookPayload payload) 
     => new (
         RepositoryName: payload.Repository.Name,
         CommitMessage: payload.HeadCommit.Message,
