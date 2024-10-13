@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Phahtshiu.Functions.Application.Crawlers.Services;
 using Phahtshiu.Functions.Application.Notification.Services;
 using Phahtshiu.Functions.Application.Sportscenter.Services;
 using Phahtshiu.Functions.Infrastructure.Bark;
+using Phahtshiu.Functions.Infrastructure.Crawlers;
 using Phahtshiu.Functions.Infrastructure.Data;
 using Phahtshiu.Functions.Infrastructure.Sportscenter;
 
@@ -18,6 +20,7 @@ public static class InfrastructureRegistration
             return new TableClientFactory(connectionString!);
         });
         
+        services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<ISportscenterService, SportscenterService>();
         services.AddScoped<INotificationService, BarkNotificationService>();
         return services;

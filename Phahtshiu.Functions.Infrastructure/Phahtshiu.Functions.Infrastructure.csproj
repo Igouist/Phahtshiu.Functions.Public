@@ -14,11 +14,7 @@
     <ItemGroup>
       <PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="3.0.3" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <Folder Include="Crawlers\Options\" />
+      <PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Phahtshiu.Functions.Application.Crawlers;
 using Phahtshiu.Functions.Application.Notification;
 using Phahtshiu.Functions.Models;
 using Phahtshiu.Functions.Options;
@@ -56,5 +58,37 @@ public class ReminderEndpoints
         await _mediator.Send(command);
         
         _logger.LogInformation("[Reminder] 發送訂便當提醒完成");
+    }
+    
+    /// <summary>
+    /// 定時檢查 Steam 免費遊戲消息
+    /// </summary>
+    /// <param name="timer"></param>
+    public async Task CheckSteamFreeGameNews(
+        [TimerTrigger("0 0 17 * * *")] TimerInfo timer)
+    {
+        _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
+        
+        var command = new CheckSteamFreeGameNewsCommand();
+        _ = await _mediator.Send(command);
+        
+        _logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
+    }
+    
+    /// <summary>
+    /// 手動檢查 Steam 免費遊戲消息
+    /// </summary>
+    /// <param name="req"></param>
+    [Function("Check-Steam-Free-Game-News-By-Manual")]
+    public async Task<string> CheckSteamFreeGameNewsByManual(
+        [HttpTrigger] HttpRequestData req)
+    {
+        _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
+        
+        var command = new CheckSteamFreeGameNewsCommand();
+        var message = await _mediator.Send(command);
+        
+        _logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
+        return message;
     }
 }
