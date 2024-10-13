@@ -13,6 +13,7 @@ public static class ConfigurationRegistration
     {
         services.Configure<LineBotOption>(hostContext.Configuration.GetSection(LineBotOption.Position));
         services.Configure<BarkOption>(hostContext.Configuration.GetSection(BarkOption.Position));
+        services.Configure<ReminderOption>(hostContext.Configuration.GetSection(ReminderOption.Position));
         
         return services;
     }
