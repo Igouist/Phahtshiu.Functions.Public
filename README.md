@@ -33,6 +33,13 @@
 
 ![Image](https://i.imgur.com/zlfCoAv.png)
 
+## 定時提醒
+
+使用 TimerTrigger 來定時觸發提醒
+
+目前支援的提醒：
+- 上班日 9:30 提醒我去訂午餐= =
+
 ## 其他速記
 
 Q: 為什麼沒有 Domain 層<br/>
