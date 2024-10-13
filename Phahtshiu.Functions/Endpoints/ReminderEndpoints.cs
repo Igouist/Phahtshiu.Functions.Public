@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Phahtshiu.Functions.Application.Notification;
+using Phahtshiu.Functions.Models;
 
 namespace Phahtshiu.Functions.Endpoints;
 
