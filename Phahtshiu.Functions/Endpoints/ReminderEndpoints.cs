@@ -38,7 +38,7 @@ public class ReminderEndpoints
     [Function("Bento-Reminder")]
     public async Task BentoReminder(
         // 有空的時候改成從 Configuration 取得時間
-        [TimerTrigger("0 30 9 * * 1-5")] TimerInfo timer)
+        [TimerTrigger("0 30 1 * * 1-5")] TimerInfo timer)
     {   
         _logger.LogInformation("[Reminder] 開始發送訂便當提醒");
         
@@ -64,8 +64,9 @@ public class ReminderEndpoints
     /// 定時檢查 Steam 免費遊戲消息
     /// </summary>
     /// <param name="timer"></param>
+    [Function("Check-Steam-Free-Game-News")]
     public async Task CheckSteamFreeGameNews(
-        [TimerTrigger("0 0 17 * * *")] TimerInfo timer)
+        [TimerTrigger("0 0 10 * * *")] TimerInfo timer)
     {
         _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
         
