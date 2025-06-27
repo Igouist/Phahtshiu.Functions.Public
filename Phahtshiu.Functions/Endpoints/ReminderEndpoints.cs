@@ -20,44 +20,33 @@ public class ReminderEndpoints
     
     private readonly IMediator _mediator;
     private readonly ILogger<ReminderEndpoints> _logger;
-    private readonly ReminderOption _reminderOption;
 
     public ReminderEndpoints(
         IMediator mediator,
-        ILogger<ReminderEndpoints> logger,
-        IOptions<ReminderOption> reminderOption)
+        ILogger<ReminderEndpoints> logger)
     {
         _mediator = mediator;
         _logger = logger;
-        _reminderOption = reminderOption.Value;
     }
 
     /// <summary>
-    /// 定時提醒去訂便當
+    /// 定時提醒去買早餐
     /// </summary>
-    [Function("Bento-Reminder")]
-    public async Task BentoReminder(
+    [Function("Breakfast-Reminder")]
+    public async Task BreakfastReminder(
         // 有空的時候改成從 Configuration 取得時間
-        [TimerTrigger("0 30 1 * * 1-5")] TimerInfo timer)
+        [TimerTrigger("0 0 1 * * 1-5")] TimerInfo timer)
     {   
-        _logger.LogInformation("[Reminder] 開始發送訂便當提醒");
-        
-        var bentoUrl = _reminderOption.BentoLink;
-        if (bentoUrl.IsNullOrWhiteSpace())
-        {
-            _logger.LogWarning("[Reminder] 未設定訂便當的連結，取消發送提醒");
-            return;
-        }
+        _logger.LogInformation("[Reminder] 開始發送買早餐提醒");
         
         var command = new SendNotificationCommand(
-            Title: "[Reminder] 該訂午餐了吧！",
-            Message: $"訂便當連結 => 作燴-ZoheyEats: {bentoUrl}",
-            Url: bentoUrl,
+            Title: "[Reminder] 該買早餐了吧！",
+            Message: "再晚就沒東西吃啦！",
             Group: NotificationGroup);
         
         await _mediator.Send(command);
         
-        _logger.LogInformation("[Reminder] 發送訂便當提醒完成");
+        _logger.LogInformation("[Reminder] 發送買早餐提醒完成");
     }
     
     /// <summary>
