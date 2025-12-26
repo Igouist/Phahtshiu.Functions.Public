@@ -35,7 +35,7 @@ public class ReminderEndpoints
     [Function("Breakfast-Reminder")]
     public async Task BreakfastReminder(
         // 有空的時候改成從 Configuration 取得時間
-        [TimerTrigger("0 0 1 * * 1-5")] TimerInfo timer)
+        [TimerTrigger("0 0 1 * * 1-5")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
     {   
         _logger.LogInformation("[Reminder] 開始發送買早餐提醒");
         
@@ -55,7 +55,7 @@ public class ReminderEndpoints
     /// <param name="timer"></param>
     [Function("Check-Steam-Free-Game-News")]
     public async Task CheckSteamFreeGameNews(
-        [TimerTrigger("0 0 10 * * *")] TimerInfo timer)
+        [TimerTrigger("0 0 10 * * *")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
     {
         _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
         
