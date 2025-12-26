@@ -11,18 +11,11 @@ using LineBot = isRock.LineBot;
 
 namespace Phahtshiu.Functions.Endpoints;
 
-public class LineBotEndpoints
+public class LineBotEndpoints(
+    IMediator mediator,
+    IOptions<LineBotOption> lineBotOptions)
 {
-    private readonly IMediator _mediator;
-    private readonly LineBotOption _lineBotOptions;
-
-    public LineBotEndpoints(
-        IMediator mediator,
-        IOptions<LineBotOption> lineBotOptions)
-    {
-        _mediator = mediator;
-        _lineBotOptions = lineBotOptions.Value;
-    }
+    private readonly LineBotOption _lineBotOptions = lineBotOptions.Value;
 
     private Task<string> Run(string message)
     {
@@ -119,14 +112,14 @@ public class LineBotEndpoints
     private async Task<string> RunRandomNumberCommand(string message)
     {
         var command = new RandomNumberCommand(message);
-        var randomNumber = await _mediator.Send(command);
+        var randomNumber = await mediator.Send(command);
         return randomNumber;
     }
 
     private async Task<string> FetchSportscenterSwimmingPeopleCountCommand(string message)
     {
         var command = new FetchSportscenterSwimmingPeopleCountCommand(message);
-        var swimPeopleNum = await _mediator.Send(command);
+        var swimPeopleNum = await mediator.Send(command);
         return swimPeopleNum;
     }
     

@@ -9,32 +9,22 @@ namespace Phahtshiu.Functions.Application.UseCases.Crawlers;
 
 public record CheckSteamFreeGameNewsCommand : IRequest<string>;
 
-public class CheckSteamFreeGameNewsCommandHandler : IRequestHandler<CheckSteamFreeGameNewsCommand, string>
+public class CheckSteamFreeGameNewsCommandHandler(
+    IFeedService feedService,
+    ICheckPointService checkPointService,
+    INotificationService notificationService) 
+    : IRequestHandler<CheckSteamFreeGameNewsCommand, string>
 {
-    private readonly IFeedService _feedService;
-    private readonly ICheckPointService _checkPointService;
-    private readonly INotificationService _notificationService;
-
-    public CheckSteamFreeGameNewsCommandHandler(
-        IFeedService feedService,
-        ICheckPointService checkPointService, 
-        INotificationService notificationService)
-    {
-        _feedService = feedService;
-        _checkPointService = checkPointService;
-        _notificationService = notificationService;
-    }
-
     public async Task<string> Handle(
         CheckSteamFreeGameNewsCommand request, 
         CancellationToken cancellationToken)
     {
         const string checkPointKey = "SteamFreeGameNews";
-        var lastPointTime = await _checkPointService.GetCheckPointAsync(
+        var lastPointTime = await checkPointService.GetCheckPointAsync(
             checkPointKey, 
             cancellationToken);
         
-        var feedInfos = (await _feedService.GetFeedAsync(
+        var feedInfos = (await feedService.GetFeedAsync(
             FeedType.SteamFreeGames, 
             lastPointTime, 
             cancellationToken))?.ToImmutableList();
@@ -45,7 +35,7 @@ public class CheckSteamFreeGameNewsCommandHandler : IRequestHandler<CheckSteamFr
         }
         
         var newPointTime = feedInfos!.Max(x => x.PublishDate);
-        await _checkPointService.UpsertCheckPointAsync(
+        await checkPointService.UpsertCheckPointAsync(
             checkPointKey, 
             newPointTime, 
             cancellationToken);
@@ -66,7 +56,7 @@ public class CheckSteamFreeGameNewsCommandHandler : IRequestHandler<CheckSteamFr
                 Url = feed.Link,
                 Group = "SteamFreeGameNews"
             })
-            .Select(notification => _notificationService.NotificationAsync(notification));
+            .Select(notificationService.NotificationAsync);
         
         await Task.WhenAll(notificationTasks);
     }

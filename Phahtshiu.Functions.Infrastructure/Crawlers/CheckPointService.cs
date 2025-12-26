@@ -9,20 +9,12 @@ namespace Phahtshiu.Functions.Infrastructure.Crawlers;
 /// <summary>
 /// 檢查點服務
 /// </summary>
-public class CheckPointService : ICheckPointService
+public class CheckPointService(
+    ILogger<CheckPointService> logger,
+    ITableClientFactory tableClientFactory) : ICheckPointService
 {
     private const string TableName = "CrawlerCheckPoints";
-    
-    private readonly ILogger<CheckPointService> _logger;
-    private readonly TableClient _tableClient;
-
-    public CheckPointService(
-        ILogger<CheckPointService> logger,
-        ITableClientFactory tableClientFactory)
-    {
-        _logger = logger;
-        _tableClient = tableClientFactory.GetTableClient(TableName);
-    }
+    private readonly TableClient _tableClient = tableClientFactory.GetTableClient(TableName);
 
     /// <summary>
     /// 取得最後一次的檢查點
@@ -51,11 +43,11 @@ public class CheckPointService : ICheckPointService
         
         if (response.Status is 404)
         {
-            _logger.LogWarning("找不到檢查點資料，回傳最小值");
+            logger.LogWarning("找不到檢查點資料，回傳最小值");
             return defaultResult;
         }
 
-        _logger.LogError("取得檢查點資料時發生錯誤！將回傳最小值。 Response: {Response}", response);
+        logger.LogError("取得檢查點資料時發生錯誤！將回傳最小值。 Response: {Response}", response);
         return defaultResult;
     }
 

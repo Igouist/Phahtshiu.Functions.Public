@@ -9,26 +9,17 @@ namespace Phahtshiu.Functions.Application.UseCases.Sportscenter;
 /// </summary>
 public record SendSportscenterSwimmingReminderCommand(string SportscenterName) : IRequest;
 
-public class SendSportscenterSwimmingReminderCommandHandler 
+public class SendSportscenterSwimmingReminderCommandHandler(
+    ISportscenterService sportscenterService,
+    INotificationService notificationService) 
     : IRequestHandler<SendSportscenterSwimmingReminderCommand>
 {
-    private readonly ISportscenterService _sportscenterService;
-    private readonly INotificationService _notificationService;
-
-    public SendSportscenterSwimmingReminderCommandHandler(
-        ISportscenterService sportscenterService,
-        INotificationService notificationService)
-    {
-        _sportscenterService = sportscenterService;
-        _notificationService = notificationService;
-    }
-    
     public async Task Handle(
         SendSportscenterSwimmingReminderCommand request, 
         CancellationToken cancellationToken)
     {
         // 查詢指定運動中心的游泳池人數
-        var locationInfo = await _sportscenterService
+        var locationInfo = await sportscenterService
             .FetchPeopleCountAsync(request.SportscenterName);
         
         if (locationInfo is null)
@@ -40,7 +31,7 @@ public class SendSportscenterSwimmingReminderCommandHandler
                 Message = "查詢失敗，請檢查運動中心名稱是否正確",
                 Group = "Sportscenter"
             };
-            await _notificationService.NotificationAsync(errorMessage);
+            await notificationService.NotificationAsync(errorMessage);
             return;
         }
         
@@ -53,6 +44,6 @@ public class SendSportscenterSwimmingReminderCommandHandler
         };
         
         // 發送通知
-        await _notificationService.NotificationAsync(message);
+        await notificationService.NotificationAsync(message);
     }
 }

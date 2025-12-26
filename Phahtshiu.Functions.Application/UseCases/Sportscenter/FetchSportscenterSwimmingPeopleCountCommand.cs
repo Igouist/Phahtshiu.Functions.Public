@@ -5,17 +5,11 @@ namespace Phahtshiu.Functions.Application.UseCases.Sportscenter;
 
 public record FetchSportscenterSwimmingPeopleCountCommand(string Message) : IRequest<string>;
 
-public class FetchSportscenterSwimmingPeopleCountCommandHandler 
+public class FetchSportscenterSwimmingPeopleCountCommandHandler(
+    ISportscenterService sportscenterService) 
     : IRequestHandler<FetchSportscenterSwimmingPeopleCountCommand, string>
 {
-    private readonly ISportscenterService _sportscenterService;
     private const string DefaultSportscenterName = "松山"; // 目前也只查台北，乾脆預設先抓松山
-
-    public FetchSportscenterSwimmingPeopleCountCommandHandler(
-        ISportscenterService sportscenterService)
-    {
-        _sportscenterService = sportscenterService;
-    }
 
     public async Task<string> Handle(
         FetchSportscenterSwimmingPeopleCountCommand request, 
@@ -26,7 +20,7 @@ public class FetchSportscenterSwimmingPeopleCountCommandHandler
             ? DefaultSportscenterName
             : prompt[1];
 
-        var locationInfo = await _sportscenterService.FetchPeopleCountAsync(sportscenterName);
+        var locationInfo = await sportscenterService.FetchPeopleCountAsync(sportscenterName);
 
         if (locationInfo is null || !int.TryParse(locationInfo.SwimmingPeopleCount, out var swimPeopleNum))
         {

@@ -11,16 +11,10 @@ public record GitHubPushedEventCommand(
     string RepositoryUrl) 
     : IRequest;
 
-public class GitHubPushedEventCommandHandler : IRequestHandler<GitHubPushedEventCommand>
+public class GitHubPushedEventCommandHandler(
+    INotificationService notificationService) 
+    : IRequestHandler<GitHubPushedEventCommand>
 {
-    private readonly INotificationService _notificationService;
-
-    public GitHubPushedEventCommandHandler(
-        INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-
     public Task Handle(
         GitHubPushedEventCommand request, 
         CancellationToken cancellationToken)
@@ -33,6 +27,6 @@ public class GitHubPushedEventCommandHandler : IRequestHandler<GitHubPushedEvent
             Group = "GitHub"
         };
         
-        return _notificationService.NotificationAsync(message);
+        return notificationService.NotificationAsync(message);
     }
 }

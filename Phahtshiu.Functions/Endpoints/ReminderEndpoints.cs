@@ -14,23 +14,12 @@ namespace Phahtshiu.Functions.Endpoints;
 /// <summary>
 /// 定時提醒相關 Endpoints
 /// </summary>
-public class ReminderEndpoints
+public class ReminderEndpoints(
+    IMediator mediator,
+    ILogger<ReminderEndpoints> logger,
+    IOptions<ReminderOption> reminderOption)
 {
-    private const string NotificationGroup = "Reminder";
-    
-    private readonly IMediator _mediator;
-    private readonly ILogger<ReminderEndpoints> _logger;
-    private readonly ReminderOption _reminderOption;
-
-    public ReminderEndpoints(
-        IMediator mediator,
-        ILogger<ReminderEndpoints> logger,
-        IOptions<ReminderOption> reminderOption)
-    {
-        _mediator = mediator;
-        _logger = logger;
-        _reminderOption = reminderOption.Value;
-    }
+    private readonly ReminderOption _reminderOption = reminderOption.Value;
 
     /// <summary>
     /// 定時提醒去買早餐
@@ -40,12 +29,12 @@ public class ReminderEndpoints
         // 有空的時候改成從 Configuration 取得時間
         [TimerTrigger("0 0 1 * * 1-5")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
     {   
-        _logger.LogInformation("[Reminder] 開始發送買早餐提醒");
+        logger.LogInformation("[Reminder] 開始發送買早餐提醒");
         
         var command = new SendBreakfastReminderCommand();
-        await _mediator.Send(command);
+        await mediator.Send(command);
         
-        _logger.LogInformation("[Reminder] 發送買早餐提醒完成");
+        logger.LogInformation("[Reminder] 發送買早餐提醒完成");
     }
     
     /// <summary>
@@ -56,12 +45,12 @@ public class ReminderEndpoints
     public async Task CheckSteamFreeGameNews(
         [TimerTrigger("0 0 10 * * *")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
     {
-        _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
+        logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
         
         var command = new CheckSteamFreeGameNewsCommand();
-        _ = await _mediator.Send(command);
+        _ = await mediator.Send(command);
         
-        _logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
+        logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
     }
     
     /// <summary>
@@ -72,12 +61,12 @@ public class ReminderEndpoints
     public async Task<string> CheckSteamFreeGameNewsByManual(
         [HttpTrigger] HttpRequestData req)
     {
-        _logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
+        logger.LogInformation("[Reminder] 開始檢查 Steam 免費遊戲消息");
         
         var command = new CheckSteamFreeGameNewsCommand();
-        var message = await _mediator.Send(command);
+        var message = await mediator.Send(command);
         
-        _logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
+        logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
         return message;
     }
     
@@ -88,11 +77,11 @@ public class ReminderEndpoints
     public async Task SportscenterSwimmingPoolReminder(
         [TimerTrigger("0 0 23 * * *")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
     {
-        _logger.LogInformation("[Reminder] 開始查詢運動中心游泳池人數");
+        logger.LogInformation("[Reminder] 開始查詢運動中心游泳池人數");
         
         var command = new SendSportscenterSwimmingReminderCommand(_reminderOption.SportscenterName);
-        await _mediator.Send(command);
+        await mediator.Send(command);
         
-        _logger.LogInformation("[Reminder] 運動中心游泳池人數查詢完成");
+        logger.LogInformation("[Reminder] 運動中心游泳池人數查詢完成");
     }
 }

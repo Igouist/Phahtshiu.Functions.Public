@@ -12,16 +12,10 @@ public record GithubIssueCommentedEventCommand(
     string IssueUrl
     ) : IRequest;
 
-public class GithubIssueCommentedEventCommandHandler : IRequestHandler<GithubIssueCommentedEventCommand>
+public class GithubIssueCommentedEventCommandHandler(
+    INotificationService notificationService) 
+    : IRequestHandler<GithubIssueCommentedEventCommand>
 {
-    private readonly INotificationService _notificationService;
-
-    public GithubIssueCommentedEventCommandHandler(
-        INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-
     public Task Handle(
         GithubIssueCommentedEventCommand request, 
         CancellationToken cancellationToken)
@@ -34,6 +28,6 @@ public class GithubIssueCommentedEventCommandHandler : IRequestHandler<GithubIss
             Group = "GitHub"
         };
         
-        return _notificationService.NotificationAsync(message);
+        return notificationService.NotificationAsync(message);
     }
 }

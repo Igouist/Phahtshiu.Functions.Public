@@ -8,16 +8,8 @@ using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Endpoints;
 
-public class GitHubEndpoints
+public class GitHubEndpoints(IMediator mediator)
 {
-    private readonly IMediator _mediator;
-
-    public GitHubEndpoints(
-        IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-    
     /// <summary>
     /// 接收 Github Webhook 訊息
     /// </summary>
@@ -55,7 +47,7 @@ public class GitHubEndpoints
         }
         
         var command = EventHandlers[eventType](payload);
-        await _mediator.Send(command);
+        await mediator.Send(command);
         return command;
     }
     

@@ -13,21 +13,12 @@ namespace Phahtshiu.Functions.Infrastructure.Crawlers;
 /// <summary>
 /// 訂閱消息服務
 /// </summary>
-public class FeedService : IFeedService 
+public class FeedService(
+    ILogger<FeedService> logger,
+    IHttpClientFactory httpClientFactory,
+    IOptions<FeedSourceOption> feedSourceOption) : IFeedService 
 {
-    private readonly ILogger<FeedService> _logger;
-    private readonly HttpClient _httpClient;
-    private readonly FeedSourceOption _feedSourceOption;
-    
-    public FeedService(
-        ILogger<FeedService> logger,
-        IHttpClientFactory httpClientFactory,
-        IOptions<FeedSourceOption> feedSourceOption)
-    {
-        _logger = logger;
-        _httpClient = httpClientFactory.CreateClient();
-        _feedSourceOption = feedSourceOption.Value;
-    }
+    private readonly FeedSourceOption _feedSourceOption = feedSourceOption.Value;
     
     private static readonly Dictionary<FeedType, Func<FeedSourceOption, string>> FeedSourceMap = new()
     {
@@ -48,13 +39,14 @@ public class FeedService : IFeedService
         var feedUrl = feedSource?.Invoke(_feedSourceOption) ?? string.Empty;
         if (feedUrl.IsNullOrWhiteSpace())
         {
-            _logger.LogWarning("FeedSource {feedType} is not configured.", feedType);
+            logger.LogWarning("FeedSource {feedType} is not configured.", feedType);
             throw new NotSupportedException($"FeedType {feedType} is not configured.");
         }
         
         try
         {
-            await using var responseStream = await _httpClient.GetStreamAsync(feedUrl, cancellationToken);
+            using var httpClient = httpClientFactory.CreateClient();
+            await using var responseStream = await httpClient.GetStreamAsync(feedUrl, cancellationToken);
             using var xmlReader = XmlReader.Create(responseStream);
             
             var feed = SyndicationFeed.Load(xmlReader);
@@ -76,7 +68,7 @@ public class FeedService : IFeedService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error fetching or parsing RSS feed: {feedUrl}", feedUrl);
+            logger.LogError(ex, "Error fetching or parsing RSS feed: {feedUrl}", feedUrl);
             throw;
         }
     }

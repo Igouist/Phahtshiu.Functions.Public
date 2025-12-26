@@ -7,16 +7,8 @@ namespace Phahtshiu.Functions.Infrastructure.Sportscenter;
 /// <summary>
 /// 運動中心相關服務
 /// </summary>
-public class SportscenterService : ISportscenterService
+public class SportscenterService(IHttpClientFactory httpClientFactory) : ISportscenterService
 {
-    private readonly HttpClient _httpClient;
-
-    public SportscenterService(
-        IHttpClientFactory httpClientFactory)
-    {
-        _httpClient = httpClientFactory.CreateClient();
-    }
-
     /// <summary>
     /// 取得指定運動中心的人數資訊
     /// </summary>
@@ -33,7 +25,8 @@ public class SportscenterService : ISportscenterService
         };
         request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
-        var response = await _httpClient.SendAsync(request);
+        using var client = httpClientFactory.CreateClient(); 
+        var response = await client.SendAsync(request);
         if (response.IsSuccessStatusCode is false)
         {
             throw new Exception(response.StatusCode.ToString());

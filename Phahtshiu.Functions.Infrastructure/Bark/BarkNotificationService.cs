@@ -10,20 +10,13 @@ using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Infrastructure.Bark;
 
-public class BarkNotificationService : INotificationService
+public class BarkNotificationService(
+    IOptions<BarkOption> barkOptions,
+    IHttpClientFactory httpClientFactory) : INotificationService
 {
     private const int BarkSuccessCode = 200;
-    
-    private readonly BarkOption _barkOptions;
-    private readonly HttpClient _httpClient;
-
-    public BarkNotificationService(
-        IOptions<BarkOption> barkOptions,
-        IHttpClientFactory httpClientFactory)
-    {
-        _barkOptions = barkOptions.Value;
-        _httpClient = httpClientFactory.CreateClient();
-    }
+    private readonly BarkOption _barkOptions = barkOptions.Value;
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient();
 
     /// <summary>
     /// 發送通知

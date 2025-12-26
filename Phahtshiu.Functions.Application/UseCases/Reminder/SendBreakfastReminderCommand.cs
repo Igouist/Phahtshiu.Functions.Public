@@ -9,16 +9,10 @@ namespace Phahtshiu.Functions.Application.UseCases.Reminder;
 /// </summary>
 public record SendBreakfastReminderCommand : IRequest;
 
-public class SendBreakfastReminderCommandHandler : IRequestHandler<SendBreakfastReminderCommand>
+public class SendBreakfastReminderCommandHandler(
+    INotificationService notificationService) 
+    : IRequestHandler<SendBreakfastReminderCommand>
 {
-    private readonly INotificationService _notificationService;
-
-    public SendBreakfastReminderCommandHandler(
-        INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-    
     public Task Handle(
         SendBreakfastReminderCommand request, 
         CancellationToken cancellationToken)
@@ -30,6 +24,6 @@ public class SendBreakfastReminderCommandHandler : IRequestHandler<SendBreakfast
             Group = "Reminder"
         };
         
-        return _notificationService.NotificationAsync(message);
+        return notificationService.NotificationAsync(message);
     }
 }
