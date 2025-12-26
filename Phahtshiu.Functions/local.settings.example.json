@@ -1,0 +1,18 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    
+    "LineBot__ChannelId": "YOUR_LINEBOT_CHANNEL_ID",
+    "LineBot__ChannelSecret": "YOUR_LINEBOT_CHANNEL_SECRET",
+    "LineBot__ChannelAccessToken": "YOUR_LINEBOT_CHANNEL_ACCESS_TOKEN",
+    "LineBot__UserId": "YOUR_LINEBOT_USER_ID",
+    
+    "Bark__Key": "YOUR_BARK_KEY",
+    
+    "Reminder__SportscenterName": "松山",
+    
+    "FeedSourceUrl__SteamFreeGames": "https://steamcommunity.com/groups/freegamesfinders/rss"
+  }
+}
