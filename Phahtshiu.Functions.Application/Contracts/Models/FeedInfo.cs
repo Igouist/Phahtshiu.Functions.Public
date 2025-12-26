@@ -1,4 +1,4 @@
-﻿namespace Phahtshiu.Functions.Application.Crawlers.Models;
+﻿namespace Phahtshiu.Functions.Application.Contracts.Models;
 
 /// <summary>
 /// 訂閱資訊

@@ -1,4 +1,4 @@
-﻿namespace Phahtshiu.Functions.Application.Crawlers.Services;
+﻿namespace Phahtshiu.Functions.Application.Contracts.Services;
 
 /// <summary>
 /// 檢查點服務

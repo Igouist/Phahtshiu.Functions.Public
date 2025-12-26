@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Phahtshiu.Functions.Application.Github;
+using Phahtshiu.Functions.Application.UseCases.Github;
 using Phahtshiu.Functions.Shared.Extensions;
 
 namespace Phahtshiu.Functions.Endpoints;

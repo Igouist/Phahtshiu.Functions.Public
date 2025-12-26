@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Phahtshiu.Functions.Application.Sportscenter.Services;
+using Phahtshiu.Functions.Application.Contracts.Services;
 
-namespace Phahtshiu.Functions.Application.Sportscenter;
+namespace Phahtshiu.Functions.Application.UseCases.Sportscenter;
 
 public record FetchSportscenterSwimmingPeopleCountCommand(string Message) : IRequest<string>;
 

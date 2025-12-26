@@ -1,4 +1,4 @@
-﻿namespace Phahtshiu.Functions.Application.Notification.Models;
+﻿namespace Phahtshiu.Functions.Application.Contracts.Models;
 
 /// <summary>
 /// 通知訊息

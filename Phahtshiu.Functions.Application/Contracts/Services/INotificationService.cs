@@ -1,6 +1,6 @@
-﻿using Phahtshiu.Functions.Application.Notification.Models;
+﻿using Phahtshiu.Functions.Application.Contracts.Models;
 
-namespace Phahtshiu.Functions.Application.Notification.Services;
+namespace Phahtshiu.Functions.Application.Contracts.Services;
 
 /// <summary>
 /// 通知服務

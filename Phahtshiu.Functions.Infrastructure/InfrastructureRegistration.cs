@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Phahtshiu.Functions.Application.Crawlers.Services;
-using Phahtshiu.Functions.Application.Notification.Services;
-using Phahtshiu.Functions.Application.Sportscenter.Services;
+using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Infrastructure.Bark;
 using Phahtshiu.Functions.Infrastructure.Crawlers;
 using Phahtshiu.Functions.Infrastructure.Data;

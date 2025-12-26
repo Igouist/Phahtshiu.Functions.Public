@@ -1,13 +1,11 @@
 ﻿using System.Collections.Immutable;
 using MediatR;
-using Phahtshiu.Functions.Application.Crawlers.Enums;
-using Phahtshiu.Functions.Application.Crawlers.Models;
-using Phahtshiu.Functions.Application.Crawlers.Services;
-using Phahtshiu.Functions.Application.Notification.Models;
-using Phahtshiu.Functions.Application.Notification.Services;
+using Phahtshiu.Functions.Application.Common.Enums;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Shared.Extensions;
 
-namespace Phahtshiu.Functions.Application.Crawlers;
+namespace Phahtshiu.Functions.Application.UseCases.Crawlers;
 
 public record CheckSteamFreeGameNewsCommand : IRequest<string>;
 

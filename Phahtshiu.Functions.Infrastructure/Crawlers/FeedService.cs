@@ -2,9 +2,9 @@
 using System.Xml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Phahtshiu.Functions.Application.Crawlers.Enums;
-using Phahtshiu.Functions.Application.Crawlers.Models;
-using Phahtshiu.Functions.Application.Crawlers.Services;
+using Phahtshiu.Functions.Application.Common.Enums;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Infrastructure.Crawlers.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 

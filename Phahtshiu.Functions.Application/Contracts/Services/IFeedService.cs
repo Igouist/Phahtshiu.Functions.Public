@@ -1,7 +1,7 @@
-﻿using Phahtshiu.Functions.Application.Crawlers.Enums;
-using Phahtshiu.Functions.Application.Crawlers.Models;
+﻿using Phahtshiu.Functions.Application.Common.Enums;
+using Phahtshiu.Functions.Application.Contracts.Models;
 
-namespace Phahtshiu.Functions.Application.Crawlers.Services;
+namespace Phahtshiu.Functions.Application.Contracts.Services;
 
 /// <summary>
 /// 訂閱消息服務

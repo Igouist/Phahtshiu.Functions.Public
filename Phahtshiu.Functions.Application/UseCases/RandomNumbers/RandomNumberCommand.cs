@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Phahtshiu.Functions.Application.RandomNumbers;
+namespace Phahtshiu.Functions.Application.UseCases.RandomNumbers;
 
 public record RandomNumberCommand(string Message) : IRequest<string>;
 

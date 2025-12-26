@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Phahtshiu.Functions.Application.Notification.Models;
-using Phahtshiu.Functions.Application.Notification.Services;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 
-namespace Phahtshiu.Functions.Application.Github;
+namespace Phahtshiu.Functions.Application.UseCases.Github;
 
 public record GitHubPushedEventCommand(
     string RepositoryName,

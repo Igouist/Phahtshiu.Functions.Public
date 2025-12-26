@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using MediatR;
-using Phahtshiu.Functions.Application.RandomNumbers;
+using Phahtshiu.Functions.Application.UseCases.RandomNumbers;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Options;
-using Phahtshiu.Functions.Application.Sportscenter;
+using Phahtshiu.Functions.Application.UseCases.Sportscenter;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 using LineBot = isRock.LineBot;

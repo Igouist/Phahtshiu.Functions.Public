@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using Phahtshiu.Functions.Application.Sportscenter.Models;
-using Phahtshiu.Functions.Application.Sportscenter.Services;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 
 namespace Phahtshiu.Functions.Infrastructure.Sportscenter;
 

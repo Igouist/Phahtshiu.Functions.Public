@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Phahtshiu.Functions.Application.Sportscenter.Models;
+namespace Phahtshiu.Functions.Application.Contracts.Models;
 
 public class LocationPeopleCountInfo
 {

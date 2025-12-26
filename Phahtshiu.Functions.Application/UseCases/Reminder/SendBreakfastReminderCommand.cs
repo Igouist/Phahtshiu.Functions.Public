@@ -1,8 +1,8 @@
 using MediatR;
-using Phahtshiu.Functions.Application.Notification.Models;
-using Phahtshiu.Functions.Application.Notification.Services;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 
-namespace Phahtshiu.Functions.Application.Reminder;
+namespace Phahtshiu.Functions.Application.UseCases.Reminder;
 
 /// <summary>
 /// 發送早餐提醒

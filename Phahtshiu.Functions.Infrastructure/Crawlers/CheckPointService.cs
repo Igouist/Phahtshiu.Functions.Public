@@ -1,6 +1,6 @@
 ﻿using Azure.Data.Tables;
 using Microsoft.Extensions.Logging;
-using Phahtshiu.Functions.Application.Crawlers.Services;
+using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Infrastructure.Crawlers.Models;
 using Phahtshiu.Functions.Infrastructure.Data;
 

@@ -3,8 +3,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Phahtshiu.Functions.Application.Crawlers;
-using Phahtshiu.Functions.Application.Reminder;
+using Phahtshiu.Functions.Application.UseCases.Crawlers;
+using Phahtshiu.Functions.Application.UseCases.Reminder;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 

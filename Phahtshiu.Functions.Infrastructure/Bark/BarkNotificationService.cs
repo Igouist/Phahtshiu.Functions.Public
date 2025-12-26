@@ -2,8 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using Phahtshiu.Functions.Application.Notification.Models;
-using Phahtshiu.Functions.Application.Notification.Services;
+using Phahtshiu.Functions.Application.Contracts.Models;
+using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Infrastructure.Bark.Models;
 using Phahtshiu.Functions.Infrastructure.Bark.Options;
 using Phahtshiu.Functions.Shared.Extensions;

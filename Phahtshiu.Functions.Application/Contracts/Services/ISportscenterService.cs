@@ -1,6 +1,6 @@
-﻿using Phahtshiu.Functions.Application.Sportscenter.Models;
+﻿using Phahtshiu.Functions.Application.Contracts.Models;
 
-namespace Phahtshiu.Functions.Application.Sportscenter.Services;
+namespace Phahtshiu.Functions.Application.Contracts.Services;
 
 /// <summary>
 /// 運動中心相關服務
