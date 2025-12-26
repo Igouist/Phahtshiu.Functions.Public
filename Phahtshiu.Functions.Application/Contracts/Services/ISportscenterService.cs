@@ -8,8 +8,9 @@ namespace Phahtshiu.Functions.Application.Contracts.Services;
 public interface ISportscenterService
 {
     /// <summary>
-    /// 取得運動中心人數資訊
+    /// 取得指定運動中心的人數資訊
     /// </summary>
-    /// <returns></returns>
-    Task<SportscenterPeopleCountInfo> FetchPeopleCountAsync();
+    /// <param name="sportscenterName">運動中心名稱</param>
+    /// <returns>該運動中心的人數資訊，找不到時回傳 null</returns>
+    Task<SportscenterLocationPeopleCountInfo?> FetchPeopleCountAsync(string sportscenterName);
 }

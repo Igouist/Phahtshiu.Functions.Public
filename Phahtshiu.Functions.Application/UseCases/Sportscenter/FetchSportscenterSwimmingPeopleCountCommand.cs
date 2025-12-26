@@ -26,25 +26,13 @@ public class FetchSportscenterSwimmingPeopleCountCommandHandler
             ? DefaultSportscenterName
             : prompt[1];
 
-        var swimPeopleNum = await FetchSwimmingPeopleCount(sportscenterName);
-        
-        return swimPeopleNum is -1
-            ? "查詢運動中心資訊失敗，請稍後再試，或檢查運動中心名稱是否正確" 
-            : $"{sportscenterName}運動中心 游泳池 目前人數：{swimPeopleNum}";
-    }
-    
-    private async Task<int> FetchSwimmingPeopleCount(string sportscenterName)
-    {
-        var sportscenterPeopleCountInfo = await _sportscenterService.FetchPeopleCountAsync();
-            
-        var swimmingPeopleCount = sportscenterPeopleCountInfo
-            ?.LocationPeopleCount
-            ?.FirstOrDefault(location => location.LidName == sportscenterName)
-            ?.SwimmingPeopleCount;
+        var locationInfo = await _sportscenterService.FetchPeopleCountAsync(sportscenterName);
 
-        return int.TryParse(swimmingPeopleCount, out var result)
-            ? result
-            : -1;
-    }
+        if (locationInfo is null || !int.TryParse(locationInfo.SwimmingPeopleCount, out var swimPeopleNum))
+        {
+            return "查詢運動中心資訊失敗，請稍後再試，或檢查運動中心名稱是否正確";
+        }
 
+        return $"{sportscenterName}運動中心 游泳池 目前人數：{swimPeopleNum}";
+    }
 }

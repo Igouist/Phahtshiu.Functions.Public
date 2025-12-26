@@ -18,10 +18,11 @@ public class SportscenterService : ISportscenterService
     }
 
     /// <summary>
-    /// 取得運動中心人數資訊
+    /// 取得指定運動中心的人數資訊
     /// </summary>
-    /// <returns></returns>
-    public async Task<SportscenterPeopleCountInfo> FetchPeopleCountAsync()
+    /// <param name="sportscenterName">運動中心名稱</param>
+    /// <returns>該運動中心的人數資訊，找不到時回傳 null</returns>
+    public async Task<SportscenterLocationPeopleCountInfo?> FetchPeopleCountAsync(string sportscenterName)
     {
         const string api = $"https://booking-tpsc.sporetrofit.com/Home/loadLocationPeopleNum";
 
@@ -40,6 +41,7 @@ public class SportscenterService : ISportscenterService
 
         var body = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<SportscenterPeopleCountInfo>(body);
-        return result!;
+        
+        return result?.LocationPeopleCount?.FirstOrDefault(location => location.LidName == sportscenterName);
     }
 }

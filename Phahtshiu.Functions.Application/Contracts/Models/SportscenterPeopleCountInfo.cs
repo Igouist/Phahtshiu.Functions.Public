@@ -2,7 +2,7 @@
 
 namespace Phahtshiu.Functions.Application.Contracts.Models;
 
-public class LocationPeopleCountInfo
+public class SportscenterLocationPeopleCountInfo
 {
     [JsonPropertyName("LID")]
     public string Lid { get; set; }
@@ -26,5 +26,5 @@ public class LocationPeopleCountInfo
 public class SportscenterPeopleCountInfo
 {
     [JsonPropertyName("locationPeopleNums")]
-    public List<LocationPeopleCountInfo> LocationPeopleCount { get; set; }
+    public List<SportscenterLocationPeopleCountInfo> LocationPeopleCount { get; set; }
 }

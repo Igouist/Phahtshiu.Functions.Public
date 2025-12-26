@@ -6,4 +6,9 @@
 public class ReminderOption
 {
     public const string Position = "Reminder";
+
+    /// <summary>
+    /// 運動中心名稱
+    /// </summary>
+    public string SportscenterName { get; set; } = "松山";
 }

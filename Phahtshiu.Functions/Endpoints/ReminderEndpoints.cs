@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.UseCases.Crawlers;
 using Phahtshiu.Functions.Application.UseCases.Reminder;
+using Phahtshiu.Functions.Application.UseCases.Sportscenter;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 
@@ -19,13 +20,16 @@ public class ReminderEndpoints
     
     private readonly IMediator _mediator;
     private readonly ILogger<ReminderEndpoints> _logger;
+    private readonly ReminderOption _reminderOption;
 
     public ReminderEndpoints(
         IMediator mediator,
-        ILogger<ReminderEndpoints> logger)
+        ILogger<ReminderEndpoints> logger,
+        IOptions<ReminderOption> reminderOption)
     {
         _mediator = mediator;
         _logger = logger;
+        _reminderOption = reminderOption.Value;
     }
 
     /// <summary>
@@ -75,5 +79,20 @@ public class ReminderEndpoints
         
         _logger.LogInformation("[Reminder] 檢查 Steam 免費遊戲消息完成");
         return message;
+    }
+    
+    /// <summary>
+    /// 定時查詢運動中心游泳池人數並發送通知
+    /// </summary>
+    [Function("Sportscenter-Swimming-Pool-Reminder")]
+    public async Task SportscenterSwimmingPoolReminder(
+        [TimerTrigger("0 0 23 * * *")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
+    {
+        _logger.LogInformation("[Reminder] 開始查詢運動中心游泳池人數");
+        
+        var command = new SendSportscenterSwimmingReminderCommand(_reminderOption.SportscenterName);
+        await _mediator.Send(command);
+        
+        _logger.LogInformation("[Reminder] 運動中心游泳池人數查詢完成");
     }
 }
