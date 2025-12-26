@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.Crawlers;
 using Phahtshiu.Functions.Application.Notification;
-using Phahtshiu.Functions.Models;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 
