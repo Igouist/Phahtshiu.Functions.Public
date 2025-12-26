@@ -1,38 +1,33 @@
-﻿using MediatR;
+using MediatR;
 using Phahtshiu.Functions.Application.Notification.Models;
 using Phahtshiu.Functions.Application.Notification.Services;
 
-namespace Phahtshiu.Functions.Application.Notification;
+namespace Phahtshiu.Functions.Application.Reminder;
 
 /// <summary>
-/// 發送通知
+/// 發送早餐提醒
 /// </summary>
-public record SendNotificationCommand(
-    string Title,
-    string Message,
-    string? Url = null,
-    string? Group = null) : IRequest;
+public record SendBreakfastReminderCommand : IRequest;
 
-public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
+public class SendBreakfastReminderCommandHandler : IRequestHandler<SendBreakfastReminderCommand>
 {
     private readonly INotificationService _notificationService;
 
-    public SendNotificationCommandHandler(
+    public SendBreakfastReminderCommandHandler(
         INotificationService notificationService)
     {
         _notificationService = notificationService;
     }
     
     public Task Handle(
-        SendNotificationCommand request, 
+        SendBreakfastReminderCommand request, 
         CancellationToken cancellationToken)
     {
         var message = new NotificationBody
         {
-            Title = request.Title,
-            Message = request.Message,
-            Url = request.Url!,
-            Group = request.Group!
+            Title = "[Reminder] 該買早餐了吧！",
+            Message = "再晚就沒東西吃啦！",
+            Group = "Reminder"
         };
         
         return _notificationService.NotificationAsync(message);

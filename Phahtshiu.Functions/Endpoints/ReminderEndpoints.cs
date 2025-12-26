@@ -4,7 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.Crawlers;
-using Phahtshiu.Functions.Application.Notification;
+using Phahtshiu.Functions.Application.Reminder;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 
@@ -38,11 +38,7 @@ public class ReminderEndpoints
     {   
         _logger.LogInformation("[Reminder] 開始發送買早餐提醒");
         
-        var command = new SendNotificationCommand(
-            Title: "[Reminder] 該買早餐了吧！",
-            Message: "再晚就沒東西吃啦！",
-            Group: NotificationGroup);
-        
+        var command = new SendBreakfastReminderCommand();
         await _mediator.Send(command);
         
         _logger.LogInformation("[Reminder] 發送買早餐提醒完成");
