@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="LineBotSDK" Version="2.12.39" />
+        <PackageReference Include="LineBotSDK" Version="2.18.45" />
         <PackageReference Include="MediatR" Version="12.2.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.23.0"/>
         <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />

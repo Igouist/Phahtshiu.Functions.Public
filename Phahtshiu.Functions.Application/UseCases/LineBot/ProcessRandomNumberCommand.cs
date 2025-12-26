@@ -1,18 +1,20 @@
-﻿using MediatR;
+using MediatR;
+using Phahtshiu.Functions.Application.Contracts.Services;
 
-namespace Phahtshiu.Functions.Application.UseCases.RandomNumbers;
-
-public record RandomNumberCommand(string Message) : IRequest<string>;
+namespace Phahtshiu.Functions.Application.UseCases.LineBot;
 
 /// <summary>
-/// 隨機數指令處理器
+/// 處理 LineBot 隨機數指令
 /// prompt: /r {最大值?} {選項名稱?}
 /// ex: "/r", "/r 20", "/r 20 蘋果", "/r 20 蘋果 香蕉"
 /// </summary>
-public class RandomNumberCommandHandler : IRequestHandler<RandomNumberCommand, string>
+public record ProcessRandomNumberCommand(string ReplyToken, string Message) : IRequest;
+
+public class ProcessRandomNumberCommandHandler(ILineBotService lineBotService) 
+    : IRequestHandler<ProcessRandomNumberCommand>
 {
-    public Task<string> Handle(
-        RandomNumberCommand request, 
+    public async Task Handle(
+        ProcessRandomNumberCommand request,
         CancellationToken cancellationToken)
     {
         var max = 100;
@@ -21,7 +23,9 @@ public class RandomNumberCommandHandler : IRequestHandler<RandomNumberCommand, s
         var prompt = request.Message.Split(" ");
         if (prompt.Length is 1)
         {
-            return Task.FromResult($"你骰出了【{GenerateRandomNumber(max)}:{max}】");
+            var result = $"你骰出了【{GenerateRandomNumber(max)}:{max}】";
+            await lineBotService.ReplyMessageAsync(request.ReplyToken, result);
+            return;
         }
         
         // 判斷是否有指定最大值
@@ -29,10 +33,11 @@ public class RandomNumberCommandHandler : IRequestHandler<RandomNumberCommand, s
         max = isMaxAssigned ? assignedMax : max;
         
         // "/r 20" = 只指定最大值的場合
-        if (isMaxAssigned && 
-            prompt.Length is 2)
+        if (isMaxAssigned && prompt.Length is 2)
         {
-            return Task.FromResult($"你骰出了【{GenerateRandomNumber(max)}:{max}】");
+            var result = $"你骰出了【{GenerateRandomNumber(max)}:{max}】";
+            await lineBotService.ReplyMessageAsync(request.ReplyToken, result);
+            return;
         }
         
         // 如果第二個詞用來宣告最大值了，抓選項時就往後跳一個
@@ -45,7 +50,8 @@ public class RandomNumberCommandHandler : IRequestHandler<RandomNumberCommand, s
             .OrderByDescending(result => result.value)
             .Select(result =>  $"{result.word}【{result.value}:{max}】");
         
-        return Task.FromResult(string.Join(Environment.NewLine, results));
+        var message = string.Join(Environment.NewLine, results);
+        await lineBotService.ReplyMessageAsync(request.ReplyToken, message);
     }
     
     private static int GenerateRandomNumber(int max)

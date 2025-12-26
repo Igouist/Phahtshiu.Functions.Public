@@ -3,6 +3,7 @@ using Phahtshiu.Functions.Application.Contracts.Services;
 using Phahtshiu.Functions.Infrastructure.Bark;
 using Phahtshiu.Functions.Infrastructure.Crawlers;
 using Phahtshiu.Functions.Infrastructure.Data;
+using Phahtshiu.Functions.Infrastructure.LineBot;
 using Phahtshiu.Functions.Infrastructure.Sportscenter;
 
 namespace Phahtshiu.Functions.Infrastructure;
@@ -21,6 +22,8 @@ public static class InfrastructureRegistration
         services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<ISportscenterService, SportscenterService>();
         services.AddScoped<INotificationService, BarkNotificationService>();
+        services.AddScoped<ILineBotService, LineBotService>();
+        services.AddScoped<ICheckPointService, CheckPointService>();
         return services;
     }
 }

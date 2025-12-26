@@ -1,10 +1,9 @@
 ﻿using System.Net;
 using MediatR;
-using Phahtshiu.Functions.Application.UseCases.RandomNumbers;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Options;
-using Phahtshiu.Functions.Application.UseCases.Sportscenter;
+using Phahtshiu.Functions.Application.UseCases.LineBot;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 using LineBot = isRock.LineBot;
@@ -16,35 +15,6 @@ public class LineBotEndpoints(
     IOptions<LineBotOption> lineBotOptions)
 {
     private readonly LineBotOption _lineBotOptions = lineBotOptions.Value;
-
-    private Task<string> Run(string message)
-    {
-        var reply = message switch
-        {
-            _ when message.StartsWith("/r") => RunRandomNumberCommand(message),
-            _ when message.StartsWith("/swim") => FetchSportscenterSwimmingPeopleCountCommand(message),
-            _ => DefaultReply()
-        };
-        return reply;
-    }
-
-    /// <summary>
-    /// Line Bot 測試用 Function
-    /// </summary>
-    /// <returns></returns>
-    [Function("Line-Bot-Testing")]
-    public async Task<string> TestingLineBotReply(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] 
-        HttpRequestData req)
-    {
-        var message = await new StreamReader(req.Body).ReadToEndAsync();
-        if (message.IsNullOrEmpty())
-        {
-            return "請輸入訊息= =";
-        }
-        
-        return await Run(message);
-    }
 
     /// <summary>
     /// Line Bot 回覆訊息
@@ -59,9 +29,6 @@ public class LineBotEndpoints(
         HttpRequestData req,
         FunctionContext executionContext)
     {
-        var token = _lineBotOptions.ChannelAccessToken;
-        var bot = new LineBot.Bot(token);
-        
         try
         {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
@@ -70,58 +37,41 @@ public class LineBotEndpoints(
             var lineEvent = receivedMessage.events.FirstOrDefault()!;
             var lineEventType = lineEvent.type.ToLower();
             var lineMessageType = lineEvent.message.type.ToLower();
+            
             if (lineEventType is not "message" || lineMessageType is not "text")
             {
-                ReplyMessage(bot, lineEvent, "不支援的格式（你以為我買得起貼圖嗎？）");
+                var unsupportedMessageCommand = new ProcessUnsupportedMessageCommand(lineEvent.replyToken);
+                await mediator.Send(unsupportedMessageCommand);
                 return req.CreateResponse(HttpStatusCode.OK);
             }
         
-            var text = lineEvent.message.text.ToLower();
-            var reply = await Run(text);
+            var replyToken = lineEvent.replyToken;
+            var message = lineEvent.message.text.ToLower();
+            await RouteToCommand(replyToken, message);
             
-            ReplyMessage(bot, lineEvent, reply);
             return req.CreateResponse(HttpStatusCode.OK);
         }
         catch (Exception exception)
         {
-            var adminId = _lineBotOptions.UserId;
-            bot.PushMessage(adminId, "LineBot Exception : \n" + exception.Message);
+            var errorNotifyCommand = new NotifyLineBotErrorCommand(exception.Message);
+            await mediator.Send(errorNotifyCommand);
             throw;
         }
     }
 
-    private static void ReplyMessage(
-        LineBot.Bot bot,
-        LineBot.Event lineEvent,
-        string context)
+    /// <summary>
+    /// 根據訊息內容路由到對應的 Command
+    /// </summary>
+    private Task RouteToCommand(string replyToken, string message)
     {
-        var responseMessages = new List<LineBot.MessageBase>()
+        return message switch
         {
-            new LineBot.TextMessage(context)
+            _ when message.StartsWith("/r") => 
+                mediator.Send(new ProcessRandomNumberCommand(replyToken, message)),
+            _ when message.StartsWith("/swim") => 
+                mediator.Send(new ProcessSportscenterQueryCommand(replyToken, message)),
+            _ => 
+                mediator.Send(new ProcessUnsupportedMessageCommand(replyToken))
         };
-        bot.ReplyMessage(lineEvent.replyToken, responseMessages);
     }
-
-    #region 處理訊息動作
-    
-    private static Task<string> DefaultReply()
-    {
-        return Task.FromResult("不支援的指令 = =");
-    }
-    
-    private async Task<string> RunRandomNumberCommand(string message)
-    {
-        var command = new RandomNumberCommand(message);
-        var randomNumber = await mediator.Send(command);
-        return randomNumber;
-    }
-
-    private async Task<string> FetchSportscenterSwimmingPeopleCountCommand(string message)
-    {
-        var command = new FetchSportscenterSwimmingPeopleCountCommand(message);
-        var swimPeopleNum = await mediator.Send(command);
-        return swimPeopleNum;
-    }
-    
-    #endregion
 }
