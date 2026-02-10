@@ -24,18 +24,18 @@ public class ReminderEndpoints(
     /// <summary>
     /// 定時提醒去買早餐
     /// </summary>
-    [Function("Breakfast-Reminder")]
-    public async Task BreakfastReminder(
-        // 有空的時候改成從 Configuration 取得時間
-        [TimerTrigger("0 0 1 * * 1-5")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
-    {   
-        logger.LogInformation("[Reminder] 開始發送買早餐提醒");
-        
-        var command = new SendBreakfastReminderCommand();
-        await mediator.Send(command);
-        
-        logger.LogInformation("[Reminder] 發送買早餐提醒完成");
-    }
+    // [Function("Breakfast-Reminder")]
+    // public async Task BreakfastReminder(
+    //     // 有空的時候改成從 Configuration 取得時間
+    //     [TimerTrigger("0 0 1 * * 1-5")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
+    // {   
+    //     logger.LogInformation("[Reminder] 開始發送買早餐提醒");
+    //     
+    //     var command = new SendBreakfastReminderCommand();
+    //     await mediator.Send(command);
+    //     
+    //     logger.LogInformation("[Reminder] 發送買早餐提醒完成");
+    // }
     
     /// <summary>
     /// 定時檢查 Steam 免費遊戲消息
