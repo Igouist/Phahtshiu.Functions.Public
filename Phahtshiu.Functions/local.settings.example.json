@@ -13,6 +13,9 @@
     
     "Reminder__SportscenterName": "松山",
     
-    "FeedSourceUrl__SteamFreeGames": "https://steamcommunity.com/groups/freegamesfinders/rss"
+    "FeedSourceUrl__SteamFreeGames": "https://steamcommunity.com/groups/freegamesfinders/rss",
+
+    "Cwa__ApiKey": "YOUR_CWA_API_KEY",
+    "Cwa__LocationName": "臺北市"
   }
 }

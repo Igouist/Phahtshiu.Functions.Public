@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Phahtshiu.Functions.Infrastructure.Bark.Options;
 using Phahtshiu.Functions.Infrastructure.Crawlers.Options;
+using Phahtshiu.Functions.Infrastructure.Weather.Options;
 using Phahtshiu.Functions.Options;
 using InfrastructureLineBotOption = Phahtshiu.Functions.Infrastructure.LineBot.Options.LineBotOption;
 
@@ -18,6 +19,7 @@ public static class ConfigurationRegistration
         services.Configure<InfrastructureLineBotOption>(hostContext.Configuration.GetSection(LineBotOption.Position));
         services.Configure<ReminderOption>(hostContext.Configuration.GetSection(ReminderOption.Position));
         services.Configure<FeedSourceOption>(hostContext.Configuration.GetSection(FeedSourceOption.Position));
+        services.Configure<CwaOption>(hostContext.Configuration.GetSection(CwaOption.Position));
         
         return services;
     }

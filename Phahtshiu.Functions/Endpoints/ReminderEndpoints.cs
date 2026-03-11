@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Phahtshiu.Functions.Application.UseCases.Crawlers;
 using Phahtshiu.Functions.Application.UseCases.Reminder;
 using Phahtshiu.Functions.Application.UseCases.Sportscenter;
+using Phahtshiu.Functions.Infrastructure.Weather.Options;
 using Phahtshiu.Functions.Options;
 using Phahtshiu.Functions.Shared.Extensions;
 
@@ -17,9 +18,11 @@ namespace Phahtshiu.Functions.Endpoints;
 public class ReminderEndpoints(
     IMediator mediator,
     ILogger<ReminderEndpoints> logger,
-    IOptions<ReminderOption> reminderOption)
+    IOptions<ReminderOption> reminderOption,
+    IOptions<CwaOption> cwaOption)
 {
     private readonly ReminderOption _reminderOption = reminderOption.Value;
+    private readonly CwaOption _cwaOption = cwaOption.Value;
 
     /// <summary>
     /// 定時提醒去買早餐
@@ -83,5 +86,20 @@ public class ReminderEndpoints(
         await mediator.Send(command);
         
         logger.LogInformation("[Reminder] 運動中心游泳池人數查詢完成");
+    }
+
+    /// <summary>
+    /// 定時發送每日天氣預報通知（每天上午 06:00 台灣時間）
+    /// </summary>
+    [Function("Weather-Forecast-Reminder")]
+    public async Task WeatherForecastReminder(
+        [TimerTrigger("0 0 22 * * *")] Microsoft.Azure.Functions.Worker.TimerInfo timer)
+    {
+        logger.LogInformation("[Reminder] 開始取得每日天氣預報");
+
+        var command = new SendWeatherForecastReminderCommand(_cwaOption.LocationName);
+        await mediator.Send(command);
+
+        logger.LogInformation("[Reminder] 每日天氣預報通知完成");
     }
 }
