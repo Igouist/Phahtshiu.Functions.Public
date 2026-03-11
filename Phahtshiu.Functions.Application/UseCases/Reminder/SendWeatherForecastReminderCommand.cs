@@ -36,7 +36,8 @@ public class SendWeatherForecastReminderCommandHandler(
         {
             Title = $"[天氣] {forecast.LocationName} 今日天氣預報",
             Message = $"{forecast.WeatherDescription}｜{forecast.MinTemperature}°C ~ {forecast.MaxTemperature}°C｜降雨機率 {forecast.RainProbability}%",
-            Group = "Weather"
+            Group = "Weather",
+            Url = "https://www.cwb.gov.tw/V8/C/W/County/index.html"
         };
 
         await notificationService.NotificationAsync(message);

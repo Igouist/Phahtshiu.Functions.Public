@@ -40,7 +40,8 @@ public class SendSportscenterSwimmingReminderCommandHandler(
         {
             Title = $"[運動中心] {request.SportscenterName}運動中心游泳池人數",
             Message = $"目前人數：{locationInfo.SwimmingPeopleCount}/{locationInfo.SwimmingMaxPeopleCount}",
-            Group = "Sportscenter"
+            Group = "Sportscenter",
+            Url = "https://booking-tpsc.sporetrofit.com/Home/LocationPeopleNum"
         };
         
         // 發送通知
